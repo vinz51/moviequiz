@@ -1,0 +1,9 @@
+api_get_game_play:
+  path: /game/{hash}/play
+  controller: App\Controller\GameController::play
+  methods: GET|HEAD
+
+api_post_game_play:
+  path: /game/{hash}/play
+  controller: App\Controller\GameController::result
+  methods: POST
