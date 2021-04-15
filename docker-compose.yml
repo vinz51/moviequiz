@@ -1,0 +1,20 @@
+version: "3.9"
+services:
+  front:
+    container_name: front
+    build: ./front/
+    volumes:
+      - ./front/:/usr/src/front
+    command: yarn start
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+  back:
+    container_name: back
+    build: ./back/
+    volumes:
+      - ./back/:/var/www/html
+    ports:
+      - "3001:8000"
