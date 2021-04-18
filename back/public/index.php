@@ -18,5 +18,7 @@ if ($_SERVER['APP_DEBUG']) {
 $kernel = new Kernel($_SERVER['APP_ENV'], (bool) $_SERVER['APP_DEBUG']);
 $request = Request::createFromGlobals();
 $response = $kernel->handle($request);
+$response->headers->set('Access-Control-Allow-Origin', '*');
+$response->headers->set('Content-Type', 'application/json');
 $response->send();
 $kernel->terminate($request, $response);
