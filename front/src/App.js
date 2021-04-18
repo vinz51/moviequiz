@@ -1,7 +1,18 @@
+import { useEffect } from "react";
 import logo from "./logo.svg";
 import "./App.css";
+import axios from "axios";
 
 function App() {
+  useEffect(() => {
+    axios
+      .post("http://localhost:3001/game/01010101/play")
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((error) => console.log(error));
+  }, []);
+
   return (
     <div className="App">
       <header className="App-header">
