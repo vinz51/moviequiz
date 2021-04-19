@@ -1,0 +1,28 @@
+
+.container {
+  background-color: #fbfbfb;
+  height: 100%;
+  left: 0px;
+  position: absolute;
+  top: 0px;
+  width: 100%;
+}
+
+.containerHeader {
+  margin: 35% auto 0;
+  max-width: 320px;
+  width: 100%;
+  text-align: center;
+}
+
+.containerHeaderGame {
+  margin: 15% auto 0;
+  max-width: 450px;
+  width: 100%;
+  text-align: center;
+}
+
+.playIcon {
+  cursor: pointer;
+  margin-bottom: 20px;
+}
