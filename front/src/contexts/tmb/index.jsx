@@ -39,27 +39,4 @@ TMBProvider.propTypes = {
   children: PropTypes.node.isRequired,
 };
 
-export const useGenderMovie = (options = {}) => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [genders, setGenders] = useState(null);
-
-  useEffect(() => {
-    setIsLoading(true);
-    axios
-      .get(`${BASE_URL}/genre/movie/list`, {
-        params: {
-          api_key: API_KEY,
-          ...options,
-        },
-      })
-      .then(({ data }) => setGenders(data.genres))
-      .finally(() => setIsLoading(false));
-  }, [options]);
-
-  return {
-    isLoading,
-    genders,
-  };
-};
-
 export default TMBContext;

@@ -8,20 +8,13 @@ function App() {
   const [selectedGender, setSelectedGender] = useState(-1);
   const [selectedMovie, setSelectedMovie] = useState(-1);
 
-  const handleClick = useCallback(() => {
-    console.log("handleClick !");
-  }, []);
-
   const handleGenderClick = useCallback((event, genderId) => {
     setSelectedGender(genderId);
   }, []);
 
-  console.log("selectedMovie ", selectedMovie);
-
   return (
     <>
       <Genders onClick={handleGenderClick} />
-      <button onClick={handleClick}>Click to play</button>
       {selectedGender >= 0 && (
         <MoviesList
           gender={selectedGender}
