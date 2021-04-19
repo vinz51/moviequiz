@@ -49,5 +49,20 @@
     "jest/prefer-to-be-null": 2,
     "jest/prefer-to-be-undefined": 2,
     "jest/valid-expect": 2
+  },
+  "settings": {
+    "import/resolver": {
+      "node": {
+        "paths": ["./src/"],
+        "extensions": [
+          ".js",
+          ".jsx",
+          "tsx"
+        ]
+      }
+    },
+    "react": {
+      "version": "detect"
+    }
   }
 }
