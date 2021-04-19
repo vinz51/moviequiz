@@ -4,4 +4,6 @@
 
 return [
     '_preview_error' => [['code', '_format'], ['_controller' => 'error_controller::preview', '_format' => 'html'], ['code' => '\\d+'], [['variable', '.', '[^/]++', '_format', true], ['variable', '/', '\\d+', 'code', true], ['text', '/_error']], [], []],
+    'api_get_game_play' => [['hash'], ['_controller' => 'App\\Controller\\GameController::play'], [], [['text', '/play'], ['variable', '/', '[^/]++', 'hash', true], ['text', '/game']], [], []],
+    'api_post_game_play' => [['hash'], ['_controller' => 'App\\Controller\\GameController::result'], [], [['text', '/play'], ['variable', '/', '[^/]++', 'hash', true], ['text', '/game']], [], []],
 ];

@@ -18,3 +18,12 @@ services:
       - ./back/:/var/www/html
     ports:
       - "3001:8000"
+    external_links:
+      - mongodb
+  mongodb:
+    container_name: mongodb
+    image: mongo:4.4
+    ports:
+      - "3002:27017"
+    volumes:
+    - ./data/mongodb:/data/db
