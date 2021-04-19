@@ -1,35 +1,35 @@
-import { useEffect } from "react";
-import logo from "./logo.svg";
+import { useCallback, useState } from "react";
 import "./App.css";
-import axios from "axios";
+import Genders from "./pages/genders";
+import MoviesList from "./pages/movies/list";
+import MoviesManage from "./pages/movies/manage";
 
 function App() {
-  useEffect(() => {
-    axios
-      .post("http://localhost:3001/game/01010101/play")
-      .then((data) => {
-        console.log(data);
-      })
-      .catch((error) => console.log(error));
+  const [selectedGender, setSelectedGender] = useState(-1);
+  const [selectedMovie, setSelectedMovie] = useState(-1);
+
+  const handleClick = useCallback(() => {
+    console.log("handleClick !");
   }, []);
 
+  const handleGenderClick = useCallback((event, genderId) => {
+    setSelectedGender(genderId);
+  }, []);
+
+  console.log("selectedMovie ", selectedMovie);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <Genders onClick={handleGenderClick} />
+      <button onClick={handleClick}>Click to play</button>
+      {selectedGender >= 0 && (
+        <MoviesList
+          gender={selectedGender}
+          onClick={(_, movieId) => setSelectedMovie(movieId)}
+        />
+      )}
+      {selectedMovie >= 0 && <MoviesManage id={selectedMovie} />}
+    </>
   );
 }
 

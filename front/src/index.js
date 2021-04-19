@@ -1,13 +1,14 @@
-import React from "react";
-import ReactDOM from "react-dom";
+import "semantic-ui-css/semantic.min.css";
 import "./index.css";
+import ReactDOM from "react-dom";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
+import { TMBProvider } from "./contexts/tmb";
 
 ReactDOM.render(
-  <React.StrictMode>
+  <TMBProvider>
     <App />
-  </React.StrictMode>,
+  </TMBProvider>,
   document.getElementById("root")
 );
 
