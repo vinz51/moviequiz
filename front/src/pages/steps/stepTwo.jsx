@@ -1,92 +1,98 @@
-import axios from "axios";
-import { useEffect, useState } from "react";
-import { BASE_URL, API_KEY } from "../../contexts/tmb";
-import waterfall from "async/waterfall";
-import GameContainer from "../game";
+import { useCallback, useContext, useState } from "react";
+import { Button, Header, Icon, Image } from "semantic-ui-react";
+import moment from "moment";
+import PropTypes from "prop-types";
 
-const StepTwo = () => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [movie, setMovie] = useState(null);
-  const [cast, setCast] = useState(null);
+import { buildImageTMBUrl } from "../../api/helpers";
+import { findExternalActor } from "../../api/reducers/helpers";
+import GameContext from "../../contexts/game";
+import styles from "../../styles/steps.module.css";
+import Timer from "../../components/timer";
+import TMBContext from "../../contexts/tmb";
 
-  useEffect(() => {
-    setIsLoading(true);
+export const sortRandomActorFromList = (list = {}, limit = 1) =>
+  Object.keys(list)
+    .sort(() => Math.random() - 0.5)
+    .splice(0, limit);
 
-    waterfall(
-      [
-        function (callback) {
-          axios
-            .get(`${BASE_URL}/movie/popular`, {
-              params: {
-                api_key: API_KEY,
-              },
-            })
-            .then(({ data }) => callback(null, data.results));
-        },
-        function (movies, callback) {
-          axios
-            .get(`${BASE_URL}/movie/${movies[8].id}/credits`, {
-              params: {
-                api_key: API_KEY,
-              },
-            })
-            .then(({ data }) =>
-              callback(null, {
-                movie: movies[8],
-                movieId: movies[7].id,
-                credits: data,
-              })
-            );
-        },
-        function (result, callback) {
-          axios
-            .get(`${BASE_URL}/movie/${result.movieId}/credits`, {
-              params: {
-                api_key: API_KEY,
-              },
-            })
-            .then(({ data }) =>
-              callback(null, { ...result, creditsMovie: data })
-            );
-        },
-      ],
-      function (err, result) {
-        const allCastPlayers = [];
+const StepTwo = ({ nextStep }) => {
+  const [index, setIndex] = useState(0);
+  const { state, setNextCurrentMovie } = useContext(TMBContext);
+  const { addHistoric, randomMovies } = useContext(GameContext);
 
-        allCastPlayers.push(
-          ...result.credits.cast
-            .splice(0, 5)
-            .map((cast) => ({ ...cast, isACast: true }))
-        );
+  const currentMovie = state.movies[state.currentMovie];
 
-        allCastPlayers.push(
-          ...result.creditsMovie.cast
-            .splice(0, 5)
-            .map((cast) => ({ ...cast, isACast: false }))
-        );
+  const actor = randomMovies[index]?.needToWin
+    ? currentMovie.cast[sortRandomActorFromList(currentMovie.cast)[0]]
+    : findExternalActor(state, currentMovie);
 
-        allCastPlayers.sort(() => Math.random() - 0.5);
+  const setNext = useCallback(
+    (isGoodAnswer = true) => () => {
+      addHistoric({
+        movie: currentMovie,
+        actor,
+        isCorrectAnswer: Boolean(
+          isGoodAnswer === randomMovies[index].needToWin
+        ),
+      });
 
-        setCast(allCastPlayers);
-        setMovie(result.movie);
-        setIsLoading(false);
+      const newIndex = index + 1;
+
+      if (!randomMovies[newIndex]) {
+        nextStep();
+      } else {
+        setIndex(newIndex);
+        setNextCurrentMovie(randomMovies[newIndex].id);
       }
-    );
-  }, []);
-
-  if (!movie) {
-    return null;
-  }
-
-  if (isLoading) {
-    return "Movie is loading";
-  }
+    },
+    [
+      setNextCurrentMovie,
+      randomMovies,
+      index,
+      currentMovie,
+      actor,
+      addHistoric,
+      nextStep,
+    ]
+  );
 
   return (
     <div>
-      <GameContainer movie={movie} cast={cast} />
+      <div className={styles.containerHeaderGame}>
+        <Image
+          src={buildImageTMBUrl(currentMovie.poster_path)}
+          alt={`The poster of the movie called ${currentMovie.title}`}
+          title={`The poster of the movie called ${currentMovie.title}`}
+          rounded
+          size="medium"
+          className={styles.moviePoster}
+        />
+        <Header as="h2">
+          Did {actor.name} played in {currentMovie.title} in{" "}
+          {moment(currentMovie.release_date).format("YYYY")}?
+          <Header.Subheader>
+            <Icon name="time" />
+            <Timer start onCallback={() => nextStep()} />
+          </Header.Subheader>
+        </Header>
+
+        <Button onClick={setNext()}>Yes</Button>
+        <Button onClick={setNext(false)}>No</Button>
+      </div>
     </div>
   );
 };
 
+StepTwo.propTypes = {
+  nextStep: PropTypes.func.isRequired,
+};
+
 export default StepTwo;
+
+/**
+ * <img
+   src={buildImageTMBUrl(currentMovie.poster_path)}
+   alt={`The poster of the movie called ${currentMovie.title}`}
+   title={`The poster of the movie called ${currentMovie.title}`}
+ />
+ */
