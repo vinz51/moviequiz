@@ -3,6 +3,7 @@ import { useCallback, useState } from "react";
 
 import StepOne from "./stepOne";
 import StepTwo from "./stepTwo";
+import StepThree from "./stepThree";
 
 const steps = [
   {
@@ -10,6 +11,9 @@ const steps = [
   },
   {
     component: StepTwo,
+  },
+  {
+    component: StepThree,
   },
 ];
 
@@ -21,11 +25,13 @@ const MainSteps = () => {
     []
   );
 
+  const goToHomePage = useCallback(() => setStep(0), []);
+
   const Component = steps[step].component;
 
   return (
     <div className={styles.container}>
-      <Component nextStep={nextStep} />
+      <Component nextStep={nextStep} goToHomePage={goToHomePage} />
     </div>
   );
 };

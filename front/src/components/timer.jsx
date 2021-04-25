@@ -25,7 +25,7 @@ const Timer = ({ onCallback, duration, delay, start }) => {
     }
 
     return () => clearInterval(intervalID);
-  }, [time]);
+  }, [time, delay, start, onCallback]);
 
   return time.asSeconds();
 };
