@@ -1,13 +1,16 @@
 import "semantic-ui-css/semantic.min.css";
-import "./index.css";
+import "./styles/index.css";
 import ReactDOM from "react-dom";
 import reportWebVitals from "./reportWebVitals";
+import { GameProvider } from "./contexts/game";
 import { TMBProvider } from "./contexts/tmb";
 import MainSteps from "./pages/steps";
 
 ReactDOM.render(
   <TMBProvider>
-    <MainSteps />
+    <GameProvider>
+      <MainSteps />
+    </GameProvider>
   </TMBProvider>,
   document.getElementById("root")
 );
