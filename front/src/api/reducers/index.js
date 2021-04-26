@@ -12,7 +12,7 @@ export const initialState = {
   castsError: null,
 };
 
-const tmb = (state = initialState, action) => {
+const tmb = (state = initialState, action = {}) => {
   switch (action?.type) {
     case ActionsTypes.MOVIES_LOADING:
       return { ...state, moviesLoading: !state.moviesLoading };
